@@ -1,0 +1,42 @@
+const app = document.getElementById("app");
+
+app.innerHTML = `
+<div class="card">
+
+<h1>JAMB Use of English Online CBT</h1>
+
+<p><strong>Questions:</strong> 30</p>
+<p><strong>Duration:</strong> 30 Minutes</p>
+<p><strong>Difficulty:</strong> JAMB Standard</p>
+
+<br>
+
+<h2>Candidate Information</h2>
+
+<input
+type="text"
+id="candidateName"
+placeholder="Enter your full name">
+
+<br><br>
+
+<button id="startBtn">
+Start Examination
+</button>
+
+</div>
+`;
+
+document.getElementById("startBtn").onclick = function () {
+
+const name =
+document.getElementById("candidateName").value.trim();
+
+if(name===""){
+alert("Please enter your name.");
+return;
+}
+
+alert("Welcome " + name + "! The examination will begin shortly.");
+
+};
