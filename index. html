@@ -1,17 +1,1081 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<style>
-/* All CSS here */
-</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>JAMB Use of English CBT</title>
+    <style>
+        /* === RESET & BASE === */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #1a1a2e;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .app-container {
+            max-width: 820px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            padding: 24px 20px 32px;
+            position: relative;
+        }
+
+        /* === HEADER === */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0a2647;
+            letter-spacing: -0.3px;
+        }
+        .timer-box {
+            background: #0a2647;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .timer-box span {
+            background: #ffd700;
+            color: #0a2647;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* === CANDIDATE NAME === */
+        .candidate-section {
+            background: #eef3fc;
+            padding: 14px 18px;
+            border-radius: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+        .candidate-section label {
+            font-weight: 600;
+            color: #0a2647;
+            font-size: 0.95rem;
+        }
+        .candidate-section input {
+            flex: 1;
+            min-width: 160px;
+            padding: 10px 14px;
+            border: 2px solid #ccd9e8;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .candidate-section input:focus {
+            border-color: #0a2647;
+        }
+        .candidate-section .name-status {
+            font-size: 0.85rem;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        /* === PROGRESS / NAVIGATOR === */
+        .navigator {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0 18px;
+            justify-content: center;
+        }
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 40px;
+            border: 2px solid #d0d9e6;
+            background: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-btn:hover {
+            border-color: #0a2647;
+            background: #f0f4fe;
+        }
+        .nav-btn.active {
+            background: #0a2647;
+            color: #fff;
+            border-color: #0a2647;
+        }
+        .nav-btn.answered {
+            border-color: #2e7d32;
+            background: #e6f4ea;
+        }
+        .nav-btn.marked {
+            border-color: #b76e00;
+            background: #fff3d6;
+        }
+        .nav-btn.answered.marked {
+            border-color: #b76e00;
+            background: #ffebc2;
+        }
+
+        /* === QUESTION CARD === */
+        .question-card {
+            background: #fafbfc;
+            border-radius: 20px;
+            padding: 20px 18px;
+            border: 1px solid #e6ecf3;
+            margin-bottom: 16px;
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .q-number {
+            font-weight: 700;
+            color: #0a2647;
+            font-size: 1.1rem;
+        }
+        .q-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .q-actions button {
+            background: transparent;
+            border: 2px solid #ccd9e8;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .q-actions .mark-btn.marked {
+            background: #b76e00;
+            border-color: #b76e00;
+            color: #fff;
+        }
+        .q-actions .mark-btn:not(.marked):hover {
+            border-color: #b76e00;
+            background: #fff3d6;
+        }
+
+        .q-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+        .q-text .passage {
+            background: #eef3fc;
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-weight: 400;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            border-left: 4px solid #0a2647;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            padding: 12px 16px;
+            border-radius: 16px;
+            border: 2px solid #e6ecf3;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 0.98rem;
+        }
+        .options label:hover {
+            border-color: #a0b8d0;
+            background: #f7faff;
+        }
+        .options input[type="radio"] {
+            accent-color: #0a2647;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .options label.selected {
+            border-color: #0a2647;
+            background: #e6edf8;
+        }
+
+        /* === NAVIGATION BUTTONS === */
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .action-row .left,
+        .action-row .right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 24px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+            background: #e6ecf3;
+            color: #1a1a2e;
+        }
+        .btn-primary {
+            background: #0a2647;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #163a5c;
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-success {
+            background: #2e7d32;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #1f5a22;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #ccd9e8;
+        }
+        .btn-outline:hover {
+            border-color: #0a2647;
+            background: #f0f4fe;
+        }
+        .btn-danger {
+            background: #b71c1c;
+            color: #fff;
+        }
+        .btn-danger:hover {
+            background: #8f1414;
+        }
+
+        /* === RESULTS === */
+        .results-panel {
+            display: none;
+            margin-top: 20px;
+        }
+        .results-panel.show {
+            display: block;
+        }
+        .score-badge {
+            text-align: center;
+            padding: 24px;
+            background: #e6edf8;
+            border-radius: 24px;
+            margin-bottom: 20px;
+        }
+        .score-badge .big-score {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #0a2647;
+        }
+        .score-badge .sub {
+            font-size: 1rem;
+            color: #3a4a6b;
+        }
+        .review-item {
+            background: #fafbfc;
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            border-left: 6px solid #ccd9e8;
+        }
+        .review-item.correct {
+            border-left-color: #2e7d32;
+        }
+        .review-item.wrong {
+            border-left-color: #b71c1c;
+        }
+        .review-item .q {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .review-item .ans {
+            font-size: 0.92rem;
+        }
+        .review-item .ans .correct-ans {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        .review-item .ans .wrong-ans {
+            color: #b71c1c;
+            font-weight: 600;
+        }
+
+        .section-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin: 16px 0 20px;
+        }
+        .stat-chip {
+            background: #eef3fc;
+            padding: 10px 8px;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        .stat-chip .num {
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: block;
+            color: #0a2647;
+        }
+
+        /* === LEADERBOARD === */
+        .leaderboard {
+            background: #f7faff;
+            border-radius: 20px;
+            padding: 16px 18px;
+            margin-top: 20px;
+            border: 1px solid #dce5f0;
+        }
+        .leaderboard h3 {
+            margin-bottom: 10px;
+            color: #0a2647;
+        }
+        .leaderboard ol {
+            padding-left: 22px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .leaderboard li {
+            padding: 6px 0;
+            border-bottom: 1px solid #e6ecf3;
+            font-size: 0.95rem;
+        }
+        .leaderboard .me {
+            background: #ffd70040;
+            border-radius: 8px;
+            padding-left: 8px;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 600px) {
+            .app-container {
+                padding: 16px 12px;
+            }
+            .header h1 {
+                font-size: 1rem;
+            }
+            .timer-box {
+                font-size: 1rem;
+                padding: 6px 14px;
+            }
+            .nav-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 0.75rem;
+            }
+            .q-text {
+                font-size: 0.95rem;
+            }
+            .options label {
+                font-size: 0.9rem;
+                padding: 10px 12px;
+            }
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #b0c4de;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #eef3fc;
+        }
+    </style>
 </head>
-
 <body>
-<!-- All HTML here -->
 
-<script>
-// All JavaScript here
-</script>
+    <div class="app-container" id="app">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📘 JAMB Use of English</h1>
+            <div class="timer-box">
+                ⏱️ <span id="timerDisplay">30:00</span>
+            </div>
+        </div>
+
+        <!-- CANDIDATE -->
+        <div class="candidate-section">
+            <label for="candidateName">👤 Your Name:</label>
+            <input type="text" id="candidateName" placeholder="Enter full name" value="Test Candidate" />
+            <span class="name-status" id="nameStatus">✅</span>
+        </div>
+
+        <!-- NAVIGATOR -->
+        <div class="navigator" id="navigatorContainer"></div>
+
+        <!-- QUESTION CARD -->
+        <div class="question-card" id="questionCard">
+            <div class="q-header">
+                <span class="q-number" id="qNumber">Question 1 / 30</span>
+                <div class="q-actions">
+                    <button class="mark-btn" id="markBtn">📌 Mark for Review</button>
+                </div>
+            </div>
+            <div class="q-text" id="qText"></div>
+            <div class="options" id="optionsContainer"></div>
+        </div>
+
+        <!-- ACTION ROW -->
+        <div class="action-row">
+            <div class="left">
+                <button class="btn btn-outline" id="prevBtn">◀ Previous</button>
+                <button class="btn btn-outline" id="nextBtn">Next ▶</button>
+            </div>
+            <div class="right">
+                <button class="btn btn-success" id="submitBtn">✅ Submit Exam</button>
+            </div>
+        </div>
+
+        <!-- RESULTS PANEL -->
+        <div class="results-panel" id="resultsPanel">
+            <div class="score-badge">
+                <div class="big-score" id="finalScore">0 / 30</div>
+                <div class="sub" id="finalPercent">0%</div>
+                <div style="margin-top:6px;font-weight:500;" id="finalGrade"></div>
+            </div>
+
+            <div class="section-stats" id="sectionStats"></div>
+
+            <h3 style="margin:12px 0 8px;">📝 Detailed Review</h3>
+            <div id="reviewContainer"></div>
+
+            <div class="leaderboard" id="leaderboardContainer">
+                <h3>🏆 Leaderboard</h3>
+                <ol id="leaderboardList">
+                    <li>Loading...</li>
+                </ol>
+                <button class="btn btn-primary" id="refreshLeaderboardBtn" style="margin-top:10px;width:100%;">🔄 Refresh Leaderboard</button>
+            </div>
+
+            <button class="btn btn-outline" id="restartBtn" style="margin-top:16px;width:100%;">🔄 Restart Exam</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  DATA – 30 AUTHENTIC JAMB-STYLE USE OF ENGLISH QUESTIONS
+        //  Balanced: Lexis/Structure(10), Comprehension(5), Cloze(5),
+        //  Registers(3), Oral(3), Idioms(2), Synonyms/Antonyms(2)
+        // ============================================================
+        const QUESTIONS = [{
+            id: 1,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>The committee _____ to submit its report by Friday.</em>',
+            options: ['is expected', 'are expected', 'have expected', 'was expected'],
+            correct: 0
+        }, {
+            id: 2,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>Neither the teacher nor the students _____ present.</em>',
+            options: ['was', 'were', 'is', 'are'],
+            correct: 1
+        }, {
+            id: 3,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>If I _____ you, I would accept the offer.</em>',
+            options: ['am', 'was', 'were', 'had been'],
+            correct: 2
+        }, {
+            id: 4,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>The principal, together with his staff, _____ attending the conference.</em>',
+            options: ['is', 'are', 'were', 'have been'],
+            correct: 0
+        }, {
+            id: 5,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>She has been _____ for the position for three years.</em>',
+            options: ['waiting', 'awaiting', 'expecting', 'hoping'],
+            correct: 0
+        }, {
+            id: 6,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>The government has _____ a new policy on education.</em>',
+            options: ['adapted', 'adopted', 'adept', 'adjust'],
+            correct: 1
+        }, {
+            id: 7,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>He is _____ for his meticulous attention to detail.</em>',
+            options: ['notable', 'notorious', 'noticeable', 'noted'],
+            correct: 0
+        }, {
+            id: 8,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>The teacher _____ the students for their hard work.</em>',
+            options: ['commended', 'commented', 'commenced', 'commanded'],
+            correct: 0
+        }, {
+            id: 9,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>The novel is _____ to be a classic.</em>',
+            options: ['regarded', 'considered', 'assumed', 'thought'],
+            correct: 1
+        }, {
+            id: 10,
+            section: 'Lexis & Structure',
+            text: 'Choose the option that best completes the sentence: <br> <em>He is _____ in his approach to problem-solving.</em>',
+            options: ['methodical', 'methodic', 'methodological', 'methodist'],
+            correct: 0
+        }, {
+            id: 11,
+            section: 'Comprehension',
+            text: '<span class="passage">Read the passage and answer the question: <br><br> "The African elephant, the largest land animal, is distinguished by its large ears and long trunk. It plays a crucial role in its ecosystem by maintaining habitats and dispersing seeds. However, poaching and habitat loss have severely reduced its population."</span><br>What is the main threat to the African elephant according to the passage?',
+            options: ['Climate change', 'Disease', 'Poaching and habitat loss', 'Predators'],
+            correct: 2
+        }, {
+            id: 12,
+            section: 'Comprehension',
+            text: '<span class="passage">Read the passage and answer the question: <br><br> "Nigeria’s literary landscape has produced numerous world-renowned authors. From Chinua Achebe to Chimamanda Ngozi Adichie, Nigerian writers continue to shape global conversations about culture, identity, and history. Their works have been translated into many languages."</span><br>According to the passage, Nigerian writers are known for:',
+            options: ['Writing only in English', 'Shaping global conversations', 'Winning many awards', 'Writing about technology'],
+            correct: 1
+        }, {
+            id: 13,
+            section: 'Comprehension',
+            text: '<span class="passage">Read the passage and answer the question: <br><br> "The Amazon rainforest is often referred to as the lungs of the Earth because it produces a significant portion of the world\'s oxygen. It also houses incredible biodiversity, with millions of species still undiscovered."</span><br>Why is the Amazon called the lungs of the Earth?',
+            options: ['It has many trees', 'It produces oxygen', 'It is very large', 'It has many animals'],
+            correct: 1
+        }, {
+            id: 14,
+            section: 'Comprehension',
+            text: '<span class="passage">Read the passage and answer the question: <br><br> "Artificial intelligence (AI) is transforming industries by automating tasks and providing insights. While AI offers many benefits, it also raises ethical concerns about privacy and job displacement."</span><br>What concern about AI is mentioned?',
+            options: ['Cost', 'Complexity', 'Privacy and job displacement', 'Lack of data'],
+            correct: 2
+        }, {
+            id: 15,
+            section: 'Comprehension',
+            text: '<span class="passage">Read the passage and answer the question: <br><br> "The Great Wall of China, built over centuries, was originally constructed to protect Chinese states from invasions. It stretches over 13,000 miles and remains one of the most iconic structures in the world."</span><br>What was the original purpose of the Great Wall?',
+            options: ['Tourism', 'Protection from invasions', 'Trade route', 'Religious site'],
+            correct: 1
+        }, {
+            id: 16,
+            section: 'Cloze Passage',
+            text: '<span class="passage">Fill in the blank with the most appropriate word: <br><br> "Education is a powerful tool for _____ development. It empowers individuals and strengthens communities. Without education, progress becomes _____."</span><br>_____ (first blank)',
+            options: ['social', 'personal', 'economic', 'national'],
+            correct: 0
+        }, {
+            id: 17,
+            section: 'Cloze Passage',
+            text: '<span class="passage">Fill in the blank with the most appropriate word: <br><br> "Education is a powerful tool for social development. It empowers individuals and strengthens communities. Without education, progress becomes _____."</span><br>_____ (second blank)',
+            options: ['impossible', 'difficult', 'limited', 'slow'],
+            correct: 0
+        }, {
+            id: 18,
+            section: 'Cloze Passage',
+            text: '<span class="passage">Fill in the blank: <br><br> "The _____ of the new policy was met with mixed reactions from the public."</span>',
+            options: ['introduction', 'implementation', 'inception', 'invention'],
+            correct: 1
+        }, {
+            id: 19,
+            section: 'Cloze Passage',
+            text: '<span class="passage">Fill in the blank: <br><br> "Many developing countries rely heavily on _____ for their economic growth."</span>',
+            options: ['agriculture', 'industry', 'services', 'technology'],
+            correct: 0
+        }, {
+            id: 20,
+            section: 'Cloze Passage',
+            text: '<span class="passage">Fill in the blank: <br><br> "The scientist’s research has _____ to a better understanding of the disease."</span>',
+            options: ['contributed', 'attributed', 'distributed', 'substituted'],
+            correct: 0
+        }, {
+            id: 21,
+            section: 'Registers',
+            text: 'In legal terminology, what does "alibi" mean?',
+            options: ['Evidence of guilt', 'A claim of being elsewhere', 'A written statement', 'A court order'],
+            correct: 1
+        }, {
+            id: 22,
+            section: 'Registers',
+            text: 'In medicine, "hypertension" refers to:',
+            options: ['Low blood pressure', 'High blood pressure', 'Heart failure', 'Kidney disease'],
+            correct: 1
+        }, {
+            id: 23,
+            section: 'Registers',
+            text: 'In business, "insolvent" means:',
+            options: ['Very wealthy', 'Unable to pay debts', 'Highly profitable', 'Newly established'],
+            correct: 1
+        }, {
+            id: 24,
+            section: 'Oral English',
+            text: 'Which of the following words has the stress on the second syllable?',
+            options: ['Photograph', 'Photography', 'Photographic', 'Photographer'],
+            correct: 1
+        }, {
+            id: 25,
+            section: 'Oral English',
+            text: 'In the word "interesting", the primary stress falls on the:',
+            options: ['First syllable', 'Second syllable', 'Third syllable', 'Fourth syllable'],
+            correct: 0
+        }, {
+            id: 26,
+            section: 'Oral English',
+            text: 'The vowel sound in "book" is:',
+            options: ['/uː/', '/ʊ/', '/ɔː/', '/ə/'],
+            correct: 1
+        }, {
+            id: 27,
+            section: 'Idioms & Phrasal Verbs',
+            text: 'What does the idiom "hit the nail on the head" mean?',
+            options: ['To make a mistake', 'To be exactly correct', 'To start a fight', 'To finish a task'],
+            correct: 1
+        }, {
+            id: 28,
+            section: 'Idioms & Phrasal Verbs',
+            text: 'What does "call off" mean in this sentence: "They decided to call off the meeting."',
+            options: ['Postpone', 'Cancel', 'Reschedule', 'Attend'],
+            correct: 1
+        }, {
+            id: 29,
+            section: 'Synonyms & Antonyms',
+            text: 'Select the synonym of "benevolent".',
+            options: ['Kind', 'Cruel', 'Angry', 'Greedy'],
+            correct: 0
+        }, {
+            id: 30,
+            section: 'Synonyms & Antonyms',
+            text: 'Select the antonym of "ephemeral".',
+            options: ['Permanent', 'Short-lived', 'Temporary', 'Fleeting'],
+            correct: 0
+        }];
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let currentIndex = 0;
+        const totalQ = QUESTIONS.length;
+        let answers = new Array(totalQ).fill(null); // index of selected option
+        let marked = new Array(totalQ).fill(false);
+        let examSubmitted = false;
+        let timerInterval = null;
+        let timeSeconds = 30 * 60; // 30 minutes
+        let candidateName = '';
+
+        // for leaderboard: we'll store all scores in localStorage (simulated shared)
+        // in production you'd use Google Sheets API – this is a self-contained demo
+        let leaderboardData = [];
+
+        // ============================================================
+        //  DOM REFS
+        // ============================================================
+        const timerDisplay = document.getElementById('timerDisplay');
+        const navigatorEl = document.getElementById('navigatorContainer');
+        const qNumber = document.getElementById('qNumber');
+        const qText = document.getElementById('qText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const markBtn = document.getElementById('markBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const resultsPanel = document.getElementById('resultsPanel');
+        const finalScore = document.getElementById('finalScore');
+        const finalPercent = document.getElementById('finalPercent');
+        const finalGrade = document.getElementById('finalGrade');
+        const reviewContainer = document.getElementById('reviewContainer');
+        const sectionStats = document.getElementById('sectionStats');
+        const leaderboardList = document.getElementById('leaderboardList');
+        const refreshLeaderboardBtn = document.getElementById('refreshLeaderboardBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const candidateInput = document.getElementById('candidateName');
+        const nameStatus = document.getElementById('nameStatus');
+
+        // ============================================================
+        //  HELPERS
+        // ============================================================
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // We'll keep questions in original order but can shuffle if desired – we keep as is for reproducibility.
+
+        // ============================================================
+        //  RENDER QUESTION
+        // ============================================================
+        function renderQuestion(index) {
+            const q = QUESTIONS[index];
+            qNumber.textContent = `Question ${index+1} / ${totalQ}`;
+
+            // text
+            qText.innerHTML = q.text;
+
+            // options
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = 'question';
+                radio.value = i;
+                if (answers[index] === i) radio.checked = true;
+                radio.addEventListener('change', () => {
+                    answers[index] = i;
+                    renderNavigator();
+                    // update active nav style
+                });
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(' ' + opt));
+                if (answers[index] === i) label.classList.add('selected');
+                optionsContainer.appendChild(label);
+            });
+
+            // mark button
+            markBtn.textContent = marked[index] ? '📌 Marked' : '📌 Mark for Review';
+            markBtn.classList.toggle('marked', marked[index]);
+
+            // update navigator
+            renderNavigator();
+            updateNavButtons();
+        }
+
+        // ============================================================
+        //  NAVIGATOR
+        // ============================================================
+        function renderNavigator() {
+            navigatorEl.innerHTML = '';
+            for (let i = 0; i < totalQ; i++) {
+                const btn = document.createElement('button');
+                btn.textContent = i + 1;
+                btn.className = 'nav-btn';
+                if (i === currentIndex) btn.classList.add('active');
+                if (answers[i] !== null) btn.classList.add('answered');
+                if (marked[i]) btn.classList.add('marked');
+                btn.addEventListener('click', () => {
+                    if (!examSubmitted) {
+                        currentIndex = i;
+                        renderQuestion(currentIndex);
+                    }
+                });
+                navigatorEl.appendChild(btn);
+            }
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === totalQ - 1;
+        }
+
+        // ============================================================
+        //  TIMER
+        // ============================================================
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeSeconds--;
+                timerDisplay.textContent = formatTime(timeSeconds);
+                if (timeSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    alert('⏰ Time is up! Auto-submitting your exam.');
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        // ============================================================
+        //  SUBMIT EXAM
+        // ============================================================
+        function submitExam() {
+            if (examSubmitted) return;
+            // check if all answered?
+            const unanswered = answers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                const confirmSubmit = confirm(`You have ${unanswered} unanswered question(s). Are you sure you want to submit?`);
+                if (!confirmSubmit) return;
+            }
+
+            // if name is empty
+            const name = candidateInput.value.trim();
+            if (!name) {
+                alert('Please enter your name before submitting.');
+                return;
+            }
+            candidateName = name;
+
+            // stop timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+
+            examSubmitted = true;
+            document.querySelector('.question-card').style.display = 'none';
+            document.querySelector('.action-row').style.display = 'none';
+            document.querySelector('.candidate-section').style.display = 'none';
+            document.querySelector('.navigator').style.display = 'none';
+            document.querySelector('.header .timer-box').style.display = 'none';
+            submitBtn.style.display = 'none';
+
+            // calculate score
+            let correctCount = 0;
+            const reviewData = [];
+            const sectionCorrect = {};
+            const sectionTotal = {};
+
+            QUESTIONS.forEach((q, idx) => {
+                const selected = answers[idx];
+                const correct = q.correct;
+                const isCorrect = (selected === correct);
+                if (isCorrect) correctCount++;
+
+                // section stats
+                const sec = q.section;
+                if (!sectionCorrect[sec]) sectionCorrect[sec] = 0;
+                if (!sectionTotal[sec]) sectionTotal[sec] = 0;
+                sectionTotal[sec]++;
+                if (isCorrect) sectionCorrect[sec]++;
+
+                reviewData.push({
+                    index: idx,
+                    question: q.text.replace(/<br>/g, ' ').replace(/<[^>]+>/g, ' ').substring(0, 100) + '...',
+                    selected: selected !== null ? q.options[selected] : '(Not answered)',
+                    correct: q.options[correct],
+                    isCorrect: isCorrect,
+                    section: q.section
+                });
+            });
+
+            const percent = Math.round((correctCount / totalQ) * 100);
+            finalScore.textContent = `${correctCount} / ${totalQ}`;
+            finalPercent.textContent = `${percent}%`;
+
+            let grade = '';
+            if (percent >= 80) grade = '🌟 Excellent!';
+            else if (percent >= 60) grade = '✅ Good!';
+            else if (percent >= 40) grade = '📖 Keep learning!';
+            else grade = '📚 More practice needed!';
+            finalGrade.textContent = grade;
+
+            // section stats
+            let statsHTML = '';
+            for (const [sec, correct] of Object.entries(sectionCorrect)) {
+                const total = sectionTotal[sec];
+                statsHTML += `<div class="stat-chip"><span class="num">${correct}/${total}</span>${sec}</div>`;
+            }
+            sectionStats.innerHTML = statsHTML;
+
+            // review
+            let reviewHTML = '';
+            reviewData.forEach((r, i) => {
+                const cls = r.isCorrect ? 'correct' : 'wrong';
+                const icon = r.isCorrect ? '✅' : '❌';
+                reviewHTML += `
+                    <div class="review-item ${cls}">
+                        <div class="q">${i+1}. ${r.question}</div>
+                        <div class="ans">${icon} Your answer: <span class="${r.isCorrect ? 'correct-ans' : 'wrong-ans'}">${r.selected}</span> &nbsp;|&nbsp; Correct: <span class="correct-ans">${r.correct}</span></div>
+                    </div>
+                `;
+            });
+            reviewContainer.innerHTML = reviewHTML;
+
+            // show results
+            resultsPanel.classList.add('show');
+
+            // save to leaderboard (localStorage)
+            saveScore(candidateName, correctCount, percent);
+
+            // refresh leaderboard
+            loadLeaderboard();
+        }
+
+        // ============================================================
+        //  LEADERBOARD (localStorage + simulated shared)
+        // ============================================================
+        function saveScore(name, score, percent) {
+            let scores = JSON.parse(localStorage.getItem('jambLeaderboard') || '[]');
+            scores.push({
+                name: name,
+                score: score,
+                percent: percent,
+                date: new Date().toLocaleString(),
+                total: totalQ
+            });
+            // sort by score desc, then percent desc
+            scores.sort((a, b) => b.score - a.score || b.percent - a.percent);
+            // keep latest 100
+            if (scores.length > 100) scores = scores.slice(0, 100);
+            localStorage.setItem('jambLeaderboard', JSON.stringify(scores));
+            leaderboardData = scores;
+        }
+
+        function loadLeaderboard() {
+            const data = JSON.parse(localStorage.getItem('jambLeaderboard') || '[]');
+            leaderboardData = data;
+            if (data.length === 0) {
+                leaderboardList.innerHTML = '<li>No scores yet. Be the first!</li>';
+                return;
+            }
+            let html = '';
+            const currentName = candidateName || candidateInput.value.trim() || 'You';
+            data.forEach((item, idx) => {
+                const isMe = item.name === currentName;
+                html += `<li class="${isMe ? 'me' : ''}">${idx+1}. <strong>${item.name}</strong> – ${item.score}/${item.total} (${item.percent}%) ${isMe ? '👈 You' : ''}</li>`;
+            });
+            leaderboardList.innerHTML = html;
+        }
+
+        // ============================================================
+        //  RESTART
+        // ============================================================
+        function restartExam() {
+            if (!confirm('Restart exam? All progress will be lost.')) return;
+            // reset state
+            currentIndex = 0;
+            answers = new Array(totalQ).fill(null);
+            marked = new Array(totalQ).fill(false);
+            examSubmitted = false;
+            timeSeconds = 30 * 60;
+            timerDisplay.textContent = formatTime(timeSeconds);
+
+            // show UI
+            document.querySelector('.question-card').style.display = 'block';
+            document.querySelector('.action-row').style.display = 'flex';
+            document.querySelector('.candidate-section').style.display = 'flex';
+            document.querySelector('.navigator').style.display = 'flex';
+            document.querySelector('.header .timer-box').style.display = 'flex';
+            submitBtn.style.display = 'inline-block';
+            resultsPanel.classList.remove('show');
+
+            if (timerInterval) clearInterval(timerInterval);
+            startTimer();
+
+            renderQuestion(0);
+            renderNavigator();
+            updateNavButtons();
+        }
+
+        // ============================================================
+        //  EVENT LISTENERS
+        // ============================================================
+        markBtn.addEventListener('click', () => {
+            if (examSubmitted) return;
+            marked[currentIndex] = !marked[currentIndex];
+            renderQuestion(currentIndex);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (examSubmitted) return;
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion(currentIndex);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (examSubmitted) return;
+            if (currentIndex < totalQ - 1) {
+                currentIndex++;
+                renderQuestion(currentIndex);
+            }
+        });
+
+        submitBtn.addEventListener('click', submitExam);
+
+        refreshLeaderboardBtn.addEventListener('click', loadLeaderboard);
+
+        restartBtn.addEventListener('click', restartExam);
+
+        // Enter key on name field
+        candidateInput.addEventListener('change', () => {
+            const name = candidateInput.value.trim();
+            if (name) nameStatus.textContent = '✅';
+            else nameStatus.textContent = '⚠️';
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        function init() {
+            // set default name
+            candidateInput.value = 'Test Candidate';
+            candidateName = 'Test Candidate';
+            nameStatus.textContent = '✅';
+
+            // shuffle questions? (optional – we keep ordered for reproducibility)
+            // but we can shuffle if desired: 
+            // shuffleArray(QUESTIONS); 
+
+            renderQuestion(0);
+            renderNavigator();
+            updateNavButtons();
+            startTimer();
+            loadLeaderboard();
+
+            // if time runs out on page reload, we keep going
+        }
+
+        init();
+    </script>
 
 </body>
 </html>
